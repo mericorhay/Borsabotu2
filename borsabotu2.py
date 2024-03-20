@@ -1,4 +1,5 @@
-from pymsgbox import password
+import pymsgbox
+from pymsgbox import password,prompt
 from selenium import webdriver
 import time
 from selenium.webdriver.common.by import By
@@ -6,14 +7,14 @@ from smtplib import SMTP
 import pyautogui
 
 try:
-    gidilecekadres = input("İlgilendiğiniz Hisseyi giriniz: ")
-    alısfiyati = float(input("Alış fiyatınız: "))
-    kacadetalis = int(input("Kaç adet Lot Mevcut: "))
-    kullaniciadi = input("Lütfen Fintables E-Mailinizi Giriniz: ")
+    gidilecekadres = prompt("İlgilendiğiniz Hisseyi giriniz: ")
+    alısfiyati = float(prompt("Alış fiyatınız: "))
+    kacadetalis = int(prompt("Kaç adet Lot Mevcut: "))
+    kullaniciadi = prompt("Lütfen Fintables E-Mailinizi Giriniz: ")
     sifre = password("Lütfen Fintables Sifrenizi Giriniz: ")
-    Outlookkullaniciadi = input("Lütfen Outlook E-Mailinizi Giriniz: ")
-    Outlooksifre = input("Lütfen Outlook Sifrenizi Giriniz: ")
-    gidecekmailadres = input("Lütfen Karşı Mail Adresinizi Giriniz: ")
+    Outlookkullaniciadi = prompt("Lütfen Outlook E-Mailinizi Giriniz: ")
+    Outlooksifre = password("Lütfen Outlook Sifrenizi Giriniz: ")
+    gidecekmailadres = prompt("Lütfen Karşı Mail Adresinizi Giriniz: ")
 
     def selenium():
         try:
@@ -44,7 +45,13 @@ try:
             sürücü.find_element(By.CSS_SELECTOR, '[class="h-16 w-full border-0 bg:background-solid-01 dark:bg-background-adaptive-01 pl-11 pr-4 text-foreground-01 focus:ring-0 sm:text-xl"]').send_keys(gidilecekadres)
             time.sleep(4)
             pyautogui.press('enter')
-            time.sleep(4)
+            time.sleep(10)
+            pymsgbox.alert("Sistem Arkaplanda Çalışacaktır. Sistemin Çalışmaya Başlaması İçin Tamam Tuşuna Basabilirsiniz.",
+                             "Pencere Gizleniyor")
+            time.sleep(2)
+            #pyautogui.press('enter')
+            sürücü.set_window_position(-2000, 0)
+
 
             while True:
                 mesajs = ""
@@ -61,19 +68,19 @@ try:
                 funcsaat = int(saat[:-6])
                 hesap = (sonanlıkfiyat - alısfiyati) * kacadetalis
 
-                if (funcsaat > 9 and funcsaat <= 12):
+                if (funcsaat > 10 and funcsaat <= 12):
                     mesajs = "Günaydın"
-                    mesaj = f"{mesajs}Zarar durumunuz: {hesap},\n Anlık Fiyat: {sonanlıkfiyat},\n FAVÖK Oranı: {favök},\n Ölçülen Saat: {saat},\n Günlük Yüzdesel Değişim: % {yüzde}"
+                    mesaj = f"{mesajs}\nKar/Zarar durumunuz: {hesap},\n Anlık Fiyat: {sonanlıkfiyat},\n FAVÖK Oranı: {favök},\n Ölçülen Saat: {saat},\n Günlük Yüzdesel Değişim: % {yüzde}"
                     mail(mesaj)
                 elif (funcsaat > 12 and funcsaat <= 15):
                     mesajs = "İyi Günler"
-                    mesaj = f"{mesajs}Zarar durumunuz: {hesap},\n Anlık Fiyat: {sonanlıkfiyat},\n FAVÖK Oranı: {favök},\n Ölçülen Saat: {saat},\n Günlük Yüzdesel Değişim: % {yüzde}"
+                    mesaj = f"{mesajs}\nKar/Zarar durumunuz: {hesap},\n Anlık Fiyat: {sonanlıkfiyat},\n FAVÖK Oranı: {favök},\n Ölçülen Saat: {saat},\n Günlük Yüzdesel Değişim: % {yüzde}"
                     mail(mesaj)
                 elif (funcsaat > 15 and funcsaat < 18):
                     mesajs = "İyi Akşamlar"
-                    mesaj = f"{mesajs}Zarar durumunuz: {hesap},\n Anlık Fiyat: {sonanlıkfiyat},\n FAVÖK Oranı: {favök},\n Ölçülen Saat: {saat},\n Günlük Yüzdesel Değişim: % {yüzde}"
+                    mesaj = f"{mesajs}\nKar/Zarar durumunuz: {hesap},\n Anlık Fiyat: {sonanlıkfiyat},\n FAVÖK Oranı: {favök},\n Ölçülen Saat: {saat},\n Günlük Yüzdesel Değişim: % {yüzde}"
                     mail(mesaj)
-                elif (funcsaat == 18, 19, 20, 21, 22, 23, 0, 1, 2, 3, 4, 5, 6, 7, 8):
+                elif (funcsaat == 18, 19, 20, 21, 22, 23, 0, 1, 2, 3, 4, 5, 6, 7, 8,9):
                     print("Sistem kendini Uykuya alıyor Yarın Görüşmek Üzere İyi Akşamlar")
                     mesajs = "Sistem kendini Uykuya alıyor Yarın Görüşmek Üzere İyi Akşamlar"
                     mesaj = f"{mesajs}"
